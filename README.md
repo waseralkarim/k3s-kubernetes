@@ -28,11 +28,11 @@ sudo cat /var/lib/rancher/k3s/server/node-token
 To make kubectl usable as a normal user (like devops):
 
 Run these commands:
-
+```bash
 mkdir -p $HOME/.kube
 sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
+```
 Get the internal IP of master node:
 
 ```bash
