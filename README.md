@@ -36,6 +36,12 @@ export KUBECONFIG=$HOME/.kube/config
 
 echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.bashrc
 source ~/.bashrc
+
+#Change ownership to devops
+sudo chown devops:devops /home/devops/.kube/config
+
+# Fix permissions (readable by user)
+chmod 600 /home/devops/.kube/config
 ```
 Get the internal IP of master node:
 
