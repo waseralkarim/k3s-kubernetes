@@ -6,6 +6,12 @@ K3s is a highly available, certified Kubernetes distribution designed for produc
 
 ## **Set up K3s Cluster**
 
+### Disable swap first
+```
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+```
+
 ### On the **Master Node**
 
 ```bash
