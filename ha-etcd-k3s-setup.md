@@ -1,5 +1,10 @@
 ## **Set your K3S_TOKEN**
 
+# Disable swap first
+```
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+```
 Generate a token if you haven’t already:
 
 ```
