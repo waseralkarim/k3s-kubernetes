@@ -1,6 +1,6 @@
 ## **Set your K3S_TOKEN**
 
-# Disable swap first
+### Disable swap first
 ```
 sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
