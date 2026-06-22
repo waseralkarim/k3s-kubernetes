@@ -13,12 +13,6 @@ export K3S_TOKEN=$(openssl rand -hex 16)
 
 ## **Install the first HA server (without Traefik)**
 
-
-### Get k3s token
-```bash
-sudo cat /var/lib/rancher/k3s/server/node-token
-```
-
 Run on **Server 1**:
 
 ```
@@ -27,6 +21,10 @@ K3S_TOKEN=$K3S_TOKEN sh -s - server \
   --cluster-init \
   --disable=traefik \
   --disable=servicelb
+```
+### Get k3s token
+```bash
+sudo cat /var/lib/rancher/k3s/server/node-token
 ```
 
 Explanation of flags:
