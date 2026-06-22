@@ -57,11 +57,19 @@ Run these commands:
 
 ```bash
 
-mkdir -p ~/.kube
-sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-sudo chown $(id -u):$(id -g) ~/.kube/config
-export KUBECONFIG=~/.kube/config
-kubectl get nodes
+mkdir -p $HOME/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
+
+export KUBECONFIG=$HOME/.kube/config
+
+echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.bashrc
+source ~/.bashrc
+
+#Change ownership to devops
+sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
+
+# Fix permissions (readable by user)
+chmod 600 /home/ubuntu/.kube/config
 
 ```
 
