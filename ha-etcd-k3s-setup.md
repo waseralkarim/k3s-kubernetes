@@ -102,35 +102,66 @@ No Traefik is installed on agents by default.
 
 ## Useful commands
 
-For raw `etcdctl` against the embedded etcd:
+List leases in a specific namespace:
 
-```jsx
-sudo ETCDCTL_API=3 etcdctl \
-  --endpoints=https://127.0.0.1:2379 \
-  --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt \
-  --cert=/var/lib/rancher/k3s/server/tls/etcd/server-client.crt \
-  --key=/var/lib/rancher/k3s/server/tls/etcd/server-client.key \
-  endpoint status --write-out=table
+
+```
+kubectl get lease -n <namespace-name>
 ```
 
-Run that on each server node and check the member list / leader.
 
-**Common Commands**
+List node heartbeats (Node Leases):
 
-- **List leases in a specific namespace:**
-    
-    ```jsx
-    kubectl get lease -n <namespace-name>
-    ```
-    
-    Use code with caution.
-    
-- **List node heartbeats (Node Leases):**
-    
-    ```jsx
-    kubectl get lease -n kube-node-lease
-    ```
+```
+kubectl get lease -n kube-node-lease
+```
 
+k3s doesn't ship `etcdctl`, so install it once:
+
+
+```bash
+sudo apt-get install -y etcd-client
+```
+
+Set the cert flags once so you don't repeat them (k3s puts them under its tls dir):
+
+```bash
+export ETCDCTL_API=3
+export ETCDCTL_CACERT=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt
+export ETCDCTL_CERT=/var/lib/rancher/k3s/server/tls/etcd/server-client.crt
+export ETCDCTL_KEY=/var/lib/rancher/k3s/server/tls/etcd/server-client.key
+export ETCDCTL_ENDPOINTS=https://127.0.0.1:2379
+```
+
+(These files are root-only, so run the `etcdctl` commands with `sudo -E` to carry the env, or just `sudo` and pass `--cacert/--cert/--key` explicitly.)
+
+**Member → node mapping:**
+
+
+
+```bash
+sudo -E etcdctl member list -w table
+```
+
+The `NAME` column is the node hostname and `PEER ADDRS` is that node's IP (`:2380`) — that's exactly "which etcd member maps to which master."
+
+**Which member is the leader (and DB health):**
+
+
+
+```bash
+sudo -E etcdctl endpoint status --cluster -w table
+```
+
+`--cluster` auto-discovers all members, so you get one row per master. The `IS LEADER` column shows `true` on exactly one — that's the current Raft leader. The same table gives you DB size and Raft term/index.
+
+**Quick health check across all members:**
+
+
+
+```bash
+sudo -E etcdctl endpoint health --cluster -w table
+```
 
 ### **Tips**
 
