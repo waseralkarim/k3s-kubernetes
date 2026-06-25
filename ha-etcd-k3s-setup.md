@@ -100,6 +100,35 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=<Token> sh -s - agent --server https://
 
 No Traefik is installed on agents by default.
 
+For raw `etcdctl` against the embedded etcd:
+
+```jsx
+sudo ETCDCTL_API=3 etcdctl \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt \
+  --cert=/var/lib/rancher/k3s/server/tls/etcd/server-client.crt \
+  --key=/var/lib/rancher/k3s/server/tls/etcd/server-client.key \
+  endpoint status --write-out=table
+```
+
+Run that on each server node and check the member list / leader.
+
+**Common Commands**
+
+- **List leases in a specific namespace:**
+    
+    ```jsx
+    kubectl get lease -n <namespace-name>
+    ```
+    
+    Use code with caution.
+    
+- **List node heartbeats (Node Leases):**
+    
+    ```jsx
+    kubectl get lease -n kube-node-lease
+    ```
+
 
 ### **Tips**
 
