@@ -100,6 +100,12 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=<Token> sh -s - agent --server https://
 
 No Traefik is installed on agents by default.
 
+Taint the master nodes:
+```
+kubectl taint nodes <master-node-name> node-role.kubernetes.io/control-plane:NoSchedule
+
+```
+
 ## Useful commands
 
 List leases in a specific namespace:
